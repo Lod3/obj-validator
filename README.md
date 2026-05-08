@@ -126,9 +126,9 @@ Prerequisites: Python 3.10+ from the [python.org installer](https://www.python.o
 
 **Windows:** the build is silent (no console window pops up next to the GUI). For debugging during development use `python build.py --debug` to keep a visible console, which prints uncaught Python errors. Antivirus tools sometimes flag fresh PyInstaller binaries as suspicious. If your colleagues see a SmartScreen warning ("Windows protected your PC"), they can click "More info" then "Run anyway", or you can sign the executable with a code-signing certificate to remove the warning permanently.
 
-**macOS:** Apple requires that .app bundles distributed outside the App Store be either notarised or run with a manual right-click > Open the first time. Without notarisation, double-clicking will show "cannot be opened because the developer cannot be verified". Notarisation requires an Apple Developer account ($99/year). For internal Meemoo distribution, the right-click trick is acceptable.
+**macOS:** Apple requires that .app bundles distributed outside the App Store be either notarised or run with a manual right-click > Open the first time. Without notarisation, double-clicking will show "cannot be opened because the developer cannot be verified". Notarisation requires an Apple Developer account ($99/year). When and how this blocks depends on the Macos version. it was tested it on Tahoe, the app always opens after the second time.
 
-**Linux:** the binary is a statically-bundled ELF that includes its own Python interpreter and tkinter. It runs on most modern distributions without further dependencies. Tested on Fedora 40+. On older glibc versions the binary may not start; in that case build on the oldest target distribution.
+**Linux:** the binary is a statically-bundled ELF that includes its own Python interpreter and tkinter. It runs on most modern distributions without further dependencies. Tested on Fedora 43. On older glibc versions the binary may not start; in that case build on the oldest target distribution.
 
 ---
 
