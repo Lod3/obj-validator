@@ -130,12 +130,6 @@ Prerequisites: Python 3.10+ from the [python.org installer](https://www.python.o
 
 **Linux:** the binary is a statically-bundled ELF that includes its own Python interpreter and tkinter. It runs on most modern distributions without further dependencies. Tested on Fedora 40+. On older glibc versions the binary may not start; in that case build on the oldest target distribution.
 
-### Distributing builds
-
-After building on each platform, copy the resulting executable from `tools/dist/` to a shared location (NAS, SharePoint, GitHub release, ...). End users only need that one file.
-
-When you publish a new version, the executable for each platform must be rebuilt on its own platform. The `build.py --clean` flag ensures a fresh build.
-
 ---
 
 ## What the tool checks
