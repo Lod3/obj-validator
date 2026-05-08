@@ -29,7 +29,12 @@ On first launch you are asked to pick an interface language (NL / FR / EN). The 
 - **Validate** starts the run. Progress streams to the log panel: stage messages plus a tick every 5 million lines for large files.
 - **Cancel** stops the run cleanly between files. The currently-processing file finishes naturally so its data is included in the combined report. Remaining files stay as `Waiting`; click Validate again to resume.
 
----
+<img width="748" height="598" alt="image" src="https://github.com/user-attachments/assets/4e1aa315-3e81-47fb-8482-fca855e3ea83" />
+&nbsp;
+<img width="748" height="598" alt="Scherm­afbeelding 2026-05-08 om 18 47 11" src="https://github.com/user-attachments/assets/1a96c8a0-6520-4c32-9f6e-2051407383ba" />
+&nbsp;
+<img width="748" height="598" alt="image" src="https://github.com/user-attachments/assets/7e21e138-4917-4e1d-a0b7-92fde86b8d30" />
+
 
 ## For developers (run from source)
 
@@ -214,11 +219,3 @@ The validator and the GUI are written against the **Python standard library only
 - Image libraries (Pillow, OpenCV) - only file existence is checked, not image content.
 
 ---
-
-## License
-
-To be decided. Candidates: MIT, Apache 2.0, CC0.
-
-## Repository
-
-To be added once the repo is public.
