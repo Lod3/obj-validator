@@ -124,7 +124,7 @@ Prerequisites: Python 3.10+ from the [python.org installer](https://www.python.o
 
 ### Per-platform notes
 
-**Windows:** the build is silent (no console window pops up next to the GUI). For debugging during development use `python build.py --debug` to keep a visible console, which prints uncaught Python errors. Antivirus tools sometimes flag fresh PyInstaller binaries as suspicious. If your colleagues see a SmartScreen warning ("Windows protected your PC"), they can click "More info" then "Run anyway", or you can sign the executable with a code-signing certificate to remove the warning permanently.
+**Windows:** the build is silent (no console window pops up next to the GUI). For debugging during development use `python build.py --debug` to keep a visible console, which prints uncaught Python errors. Antivirus tools sometimes flag fresh PyInstaller binaries as suspicious. If you see a SmartScreen warning ("Windows protected your PC"), they can click "More info" then "Run anyway".
 
 **macOS:** Apple requires that .app bundles distributed outside the App Store be either notarised or run with a manual right-click > Open the first time. Without notarisation, double-clicking will show "cannot be opened because the developer cannot be verified". Notarisation requires an Apple Developer account ($99/year). When and how this blocks depends on the Macos version. it was tested it on Tahoe, the app always opens after the second time.
 
@@ -144,7 +144,7 @@ Five reference-integrity and spec-compliance checks per OBJ file:
 
 These checks complement (not replace) GUI viewers like MeshLab/Blender and format identifiers like DROID/Siegfried. Viewers catch missing textures visually, but silently ignore other reference issues. Identifiers verify PRONOM signatures but not internal consistency. This tool fills that gap with deterministic, scriptable checks suitable for preservation workflows and bulk validation.
 
-## Read-only guarantee
+## Read-only 
 
 The validator never modifies the OBJ, MTL, or texture files it inspects. All source-file access is read-only:
 
@@ -152,27 +152,8 @@ The validator never modifies the OBJ, MTL, or texture files it inspects. All sou
 - The GUI worker thread uses the same code path and adds no writes.
 - The only files the tool **does** create are its own report outputs: `validation_batch_<date>_<time>.txt` and/or `validation_batch_<date>_<time>.csv`. These land in the user-chosen output folder, never next to the OBJ files. Reports are written via atomic `.tmp` + rename so a crash mid-write leaves no truncated file.
 
-This matches preservation requirements where the archived bundle must remain bit-identical before and after inspection. If you need a stronger guarantee, hash the source files before and after a validation run and compare; the hashes will be identical.
-
-## How validation works
-
-The validator is a single-pass line-based parser written in pure Python (stdlib only, no third-party libraries). It opens the OBJ file with UTF-8 decoding (errors replaced, not raised), iterates over every line and dispatches on the first whitespace-delimited token. Comments (`#`) and blank lines are skipped.
-
-**OBJ keywords tracked:**
-
-- `v` / `vt` / `vn`: counted (positions / texture coordinates / normals).
-- `f`: each vertex reference is split on `/` into v / vt / vn indices. Positive indices that exceed the running counts are recorded as out-of-range. Negative (relative) indices are recognised but not validated; they are rare in modern exports.
-- `mtllib`: each filename token is collected as an MTL reference.
-- `usemtl`: the material name token (literal, including any quotes or punctuation) is collected.
-
-All other keywords (`o`, `g`, `s`, `l`, `p`, etc.) are ignored: they do not affect reference integrity.
-
-**MTL keywords tracked:**
-
-- `newmtl`: the material name token is collected.
-- Texture directives: `map_Kd`, `map_Ka`, `map_Ks`, `map_Ns`, `map_d`, `map_Bump`, `bump`, `norm`, `disp`, `decal`, `map_Pr`, `map_Pm`, `map_Ps`, `map_Ke`. Matching is case-insensitive on the directive token. The filename is taken as the last whitespace-delimited token on the line, which correctly skips any preceding flag arguments (e.g. `map_Kd -clamp on -mm 0.0 1.0 wood.png`).
-
-All other MTL keywords (`Ka`, `Kd`, `Ks`, `Ns`, `d`, `illum`, ...) are read but not validated; they describe shading parameters, not file references.
+This matches preservation requirements where the archived bundle must remain bit-identical before and after inspection.
+If you need a stronger guarantee, hash the source files before and after a validation run and compare; the hashes will be identical.
 
 **Path resolution and matching:**
 
@@ -210,6 +191,5 @@ The validator and the GUI are written against the **Python standard library only
 **Validators we deliberately do NOT depend on:**
 
 - [trimesh](https://github.com/mikedh/trimesh) and [Assimp](https://github.com/assimp/assimp) - both are excellent OBJ parsers. We avoid them by design: they would parse the OBJ a second time, which defeats the purpose of an independent integrity check. The broader validation workflow uses them in parallel as cross-checks; this tool fills the gap they leave open (reference integrity).
-- Image libraries (Pillow, OpenCV) - only file existence is checked, not image content.
 
 ---
